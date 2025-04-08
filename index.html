@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <button id="toggle__btn">|||</button>
+        <div class="sidebar">
+            <h2>Sider Bar</h2>
+        </div>
+        <div class="content">
+            <h2>Nhân vật trong StarWar</h2>
+            <div id="list"></div>
+                        <div class="content__btn">
+                <button id="btn__prev">Prev</button>
+                <button id="btn__next">Next</button>    
+            </div>
+        </div>
+    </div>
+    <script>
+        const toggleBtn = document.getElementById('toggle__btn');
+        toggleBtn.addEventListener('click',function() {
+           const siderbar = document.querySelector('.sidebar');
+            const content = document.querySelector('.content'); 
+            siderbar.classList.toggle('collapsed');
+            content.classList.toggle('expended');
+        });
+        let allCharacters = []; // lưu toàn bộ danh sách
+        let currentPage = 1;
+        const itemsPerPage = 5;
+
+        function renderPage(page) {
+            const list = document.getElementById('list');
+            list.innerHTML = ''; // xóa nội dung cũ
+
+            // Tính vị trí bắt đầu và kết thúc
+            const start = (page - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+
+            const pageItems = allCharacters.slice(start, end); // lấy 5 nhân vật
+
+            pageItems.forEach(nv => {
+                list.innerHTML += `
+                    <div>
+                        <p><strong>Name:</strong> ${nv.name}</p>
+                        <p><strong>Gender:</strong> ${nv.gender}</p>
+                        <p><strong>Birthday:</strong> ${nv.birth_year}</p>
+                    </div>
+                `;
+            });
+        }
+
+        document.getElementById('btn__prev').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderPage(currentPage);
+            }
+        });
+
+        document.getElementById('btn__next').addEventListener('click', () => {
+            const totalPages = Math.ceil(allCharacters.length / itemsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderPage(currentPage);
+            }
+        });
+
+        // Gọi API để lấy dữ liệu
+        var ajax = new XMLHttpRequest();
+        ajax.open('GET', 'https://swapi.dev/api/people/', true);
+        ajax.onload = function () {
+            if (ajax.status === 200) {
+                var data = JSON.parse(ajax.responseText);
+                allCharacters = data.results;
+                renderPage(currentPage); // hiển thị trang đầu tiên
+            }
+        }
+        ajax.send();
+    </script>
+</body>
+</html>

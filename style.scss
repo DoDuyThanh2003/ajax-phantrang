@@ -1,0 +1,116 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.container {
+    display: flex;
+    flex-direction: row;
+
+    #toggle__btn {
+        position: absolute;
+        padding: 10px;
+        background-color: green;
+    }
+
+    .sidebar {
+        width: 20%;
+        background-color: cadetblue;
+        transition: width 0.5s ease;
+        overflow: hidden;
+
+        h2 {
+            text-align: center;
+        }
+
+        &.collapsed {
+            width: 0;
+            height: 0;
+        }
+    }
+
+    .content {
+        width: 80%;
+        background-color: lightblue;
+        transition: width 0.3s ease;
+
+        h2 {
+            text-align: center;
+        }
+
+        &.expended {
+            margin-left: 0;
+            width: 100%;
+        }
+        #list {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            margin-left: 40px;
+            gap: 20px;
+            padding: 50px;
+            div {
+                padding: 50px;
+            }
+        }
+        .content__btn {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+    }
+}
+@media (min-width: 740px) and (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+        #toggle__btn {
+            position: absolute;
+            right: 0;
+        }
+        .sidebar {
+            width: 100%;
+            h2{
+                padding: 50px;
+                 
+            }
+            &.collapsed {
+                width: 0;
+            }
+        }
+        .content {
+            width: 100%;
+            transition: width 0.3s ease;
+
+            margin-left: 0;
+            &.expended {
+            }
+        }
+    }
+}
+@media (max-width: 740px)
+{
+    .container {
+        flex-direction: column;
+        #toggle__btn {
+            position: absolute;
+            right: 0;
+        }
+        .sidebar {
+            width: 100%;
+            h2{
+                padding: 50px;
+                 
+            }
+            &.collapsed {
+                width: 0;
+            }
+        }
+        .content {
+            width: 100%;
+            transition: width 0.3s ease;
+
+            margin-left: 0;
+            &.expended {
+            }
+        }
+    }
+}
