@@ -29,19 +29,17 @@
             siderbar.classList.toggle('collapsed');
             content.classList.toggle('expended');
         });
-        let allCharacters = []; // lưu toàn bộ danh sách
+        let allCharacters = [];
         let currentPage = 1;
-        const itemsPerPage = 5;
+        const itemsPerPage = 10;
 
         function renderPage(page) {
             const list = document.getElementById('list');
-            list.innerHTML = ''; // xóa nội dung cũ
-
-            // Tính vị trí bắt đầu và kết thúc
+            list.innerHTML = ''; 
             const start = (page - 1) * itemsPerPage;
             const end = start + itemsPerPage;
 
-            const pageItems = allCharacters.slice(start, end); // lấy 5 nhân vật
+            const pageItems = allCharacters.slice(start, end); 
 
             pageItems.forEach(nv => {
                 list.innerHTML += `
@@ -68,18 +66,26 @@
                 renderPage(currentPage);
             }
         });
-
-        // Gọi API để lấy dữ liệu
-        var ajax = new XMLHttpRequest();
-        ajax.open('GET', 'https://swapi.dev/api/people/', true);
+        function fetchCharacters() {
+    const totalPagesToFetch = [1,2]; 
+    let fetchedCount = 0;
+    totalPagesToFetch.forEach(pageNum => {
+        const ajax = new XMLHttpRequest();
+        ajax.open('GET', `https://swapi.dev/api/people/?page=${pageNum}`, true);
         ajax.onload = function () {
             if (ajax.status === 200) {
-                var data = JSON.parse(ajax.responseText);
-                allCharacters = data.results;
-                renderPage(currentPage); // hiển thị trang đầu tiên
+                const data = JSON.parse(ajax.responseText);
+                allCharacters = allCharacters.concat(data.results);
+                fetchedCount++;
+                if (fetchedCount === totalPagesToFetch.length) {
+                    renderPage(currentPage);
+                }
             }
         }
         ajax.send();
+    });
+}
+fetchCharacters();
     </script>
 </body>
 </html>
